@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       data: body,
       timestamp: new Date().toISOString()
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Invalid request' },
       { status: 400 }
