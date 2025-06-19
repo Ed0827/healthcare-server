@@ -1,21 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Minimal config for t2.micro
+  // Performance optimizations for t3.medium
   compress: true,
   poweredByHeader: false,
   
-  // Disable heavy features
+  // Enable optimizations for better performance
   experimental: {
-    // Remove all experimental features
+    optimizePackageImports: ['lucide-react'],
   },
   
-  // Reduce bundle size
-  swcMinify: false,
-  
-  // Disable image optimization to save memory
+  // Image optimization
   images: {
-    unoptimized: true,
+    formats: ['image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
   },
 };
 
