@@ -1,0 +1,68 @@
+[
+  {
+    "negotiation_arrangement": "ffs",
+    "name": "MRI Brain Scan",
+    "billing_code_type": "CPT",
+    "billing_code_type_version": "2022",
+    "billing_code": "70551",
+    "description": "Magnetic resonance imaging of the brain without contrast",
+    "negotiated_rates": [
+      {
+        "provider_references": [1001, 1002],
+        "negotiated_prices": [
+          {
+            "negotiated_type": "negotiated",
+            "negotiated_rate": 850.00,
+            "expiration_date": "2025-12-31",
+            "service_code": ["01", "06"],
+            "billing_class": "professional"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "negotiation_arrangement": "ffs",
+    "name": "CT Scan Chest",
+    "billing_code_type": "CPT",
+    "billing_code_type_version": "2022",
+    "billing_code": "71250",
+    "description": "Computed tomography scan of the chest",
+    "negotiated_rates": [
+      {
+        "provider_references": [1003],
+        "negotiated_prices": [
+          {
+            "negotiated_type": "negotiated",
+            "negotiated_rate": 1200.00,
+            "expiration_date": "2025-12-31",
+            "service_code": ["01", "06"],
+            "billing_class": "institutional"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "negotiation_arrangement": "ffs",
+    "name": "Blood Test - Complete",
+    "billing_code_type": "CPT",
+    "billing_code_type_version": "2022",
+    "billing_code": "80048",
+    "description": "Basic metabolic panel",
+    "negotiated_rates": [
+      {
+        "provider_references": [1001, 1004],
+        "negotiated_prices": [
+          {
+            "negotiated_type": "negotiated",
+            "negotiated_rate": 150.00,
+            "expiration_date": "2025-12-31",
+            "service_code": ["01"],
+            "billing_class": "professional"
+          }
+        ]
+      }
+    ]
+  }
+] 

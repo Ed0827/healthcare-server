@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Provider {
+  id                     Int       @id @default(autoincrement())
+  name                   String
+  npi                    String    @unique
+  address                Json
+  contactInfo            Json      @map("contact_info")
+  cmsCertificationNumber String?   @map("cms_certification_number")
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @updatedAt @map("updated_at")
+  
+  standardCharges        StandardCharge[]
+  mrfFiles              MRFFile[]
+  complianceStatus      ComplianceStatus[]
+  
+  @@map("providers")
+}
+
+model Service {
+  id          Int       @id @default(autoincrement())
+  code        String
+  codeType    String    @map("code_type")
+  description String
+  category    String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  
+  standardCharges StandardCharge[]
+  
+  @@unique([code, codeType])
+  @@map("services")
+}
+
+model StandardCharge {
+  id                 Int       @id @default(autoincrement())
+  providerId         Int       @map("provider_id")
+  serviceId          Int       @map("service_id")
+  grossCharge        Decimal   @map("gross_charge") @db.Decimal(12, 2)
+  cashPrice          Decimal?  @map("cash_price") @db.Decimal(12, 2)
+  minNegotiatedRate  Decimal?  @map("min_negotiated_rate") @db.Decimal(12, 2)
+  maxNegotiatedRate  Decimal?  @map("max_negotiated_rate") @db.Decimal(12, 2)
+  effectiveDate      DateTime  @map("effective_date")
+  expirationDate     DateTime? @map("expiration_date")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  
+  provider           Provider @relation(fields: [providerId], references: [id])
+  service            Service  @relation(fields: [serviceId], references: [id])
+  negotiatedRates    NegotiatedRate[]
+  
+  @@unique([providerId, serviceId, effectiveDate])
+  @@map("standard_charges")
+}
+
+model NegotiatedRate {
+  id                 Int       @id @default(autoincrement())
+  standardChargeId   Int       @map("standard_charge_id")
+  payerName          String    @map("payer_name")
+  planName           String?   @map("plan_name")
+  negotiatedRate     Decimal   @map("negotiated_rate") @db.Decimal(12, 2)
+  billingClass       String    @map("billing_class")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  
+  standardCharge     StandardCharge @relation(fields: [standardChargeId], references: [id])
+  
+  @@map("negotiated_rates")
+}
+
+model MRFFile {
+  id            Int       @id @default(autoincrement())
+  providerId    Int       @map("provider_id")
+  fileType      String    @map("file_type")
+  fileFormat    String    @map("file_format")
+  fileUrl       String    @map("file_url")
+  fileSizeBytes BigInt?   @map("file_size_bytes")
+  checksum      String?
+  generatedAt   DateTime  @default(now()) @map("generated_at")
+  isCurrent     Boolean   @default(true) @map("is_current")
+  
+  provider      Provider @relation(fields: [providerId], references: [id])
+  
+  @@map("mrf_files")
+}
+
+model ComplianceStatus {
+  id                     Int       @id @default(autoincrement())
+  providerId             Int       @map("provider_id")
+  complianceDate         DateTime  @map("compliance_date")
+  hasMRFFile             Boolean   @default(false) @map("has_mrf_file")
+  hasHomepageLink        Boolean   @default(false) @map("has_homepage_link")
+  mrfAccessibilityScore  Int?      @map("mrf_accessibility_score")
+  lastChecked            DateTime  @default(now()) @map("last_checked")
+  notes                  String?
+  overallScore           Int?      @map("overall_score")
+  
+  provider               Provider @relation(fields: [providerId], references: [id])
+  
+  @@map("compliance_status")
+}
