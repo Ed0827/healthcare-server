@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -20,8 +20,12 @@ export const metadata: Metadata = {
   title: "HealthSaver - Healthcare Price Transparency",
   description: "Discover real healthcare costs and save money on medical procedures. Compare prices across hospitals and insurance providers.",
   keywords: "healthcare, price transparency, medical costs, insurance, hospital prices",
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
