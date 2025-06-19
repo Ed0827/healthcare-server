@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight, Building2, DollarSign, Search, Shield, TrendingUp, Users } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 interface SearchResult {
   id: string;
@@ -22,7 +22,7 @@ export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     if (!searchQuery.trim()) return;
     
     setIsSearching(true);
@@ -78,25 +78,31 @@ export default function Home() {
       setSearchResults(mockResults);
       setIsSearching(false);
     }, 1500);
-  };
+  }, [searchQuery]);
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       handleSearch();
     }
-  };
+  }, [handleSearch]);
+
+  const statsData = useMemo(() => [
+    { value: "$2.5M+", label: "Total Savings", color: "text-blue-600" },
+    { value: "50K+", label: "Procedures", color: "text-red-600" },
+    { value: "1.2K+", label: "Hospitals", color: "text-blue-600" },
+    { value: "95%", label: "Accuracy", color: "text-red-600" }
+  ], []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50 overflow-hidden">
-      {/* Animated Background Elements */}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50">
+      {/* Simplified Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-red-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-blue-400/5 to-red-400/5 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-red-500/5 rounded-full blur-3xl"></div>
       </div>
 
       {/* Header */}
-      <header className="relative z-10 bg-white/80 backdrop-blur-md border-b border-gray-200/50">
+      <header className="relative z-10 bg-white/90 backdrop-blur-sm border-b border-gray-200/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center space-x-3">
@@ -119,14 +125,14 @@ export default function Home() {
       {/* Hero Section */}
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-20">
-          {/* Main Heading with Pepsi-style typography */}
+          {/* Simplified Main Heading */}
           <div className="mb-8">
-            <h1 className="text-6xl md:text-8xl font-black mb-4 leading-tight">
-              <span className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-black mb-4 leading-tight">
+              <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                 HEALTHCARE
               </span>
               <br />
-              <span className="bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
                 PRICE
               </span>
               <br />
@@ -136,8 +142,8 @@ export default function Home() {
             </h1>
           </div>
 
-          {/* Subtitle with modern styling */}
-          <p className="text-2xl md:text-3xl text-gray-700 max-w-4xl mx-auto mb-12 font-light leading-relaxed">
+          {/* Subtitle */}
+          <p className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto mb-12 font-light leading-relaxed">
             Discover real healthcare costs and 
             <span className="font-bold text-blue-600"> save money </span>
             on medical procedures. 
@@ -146,9 +152,9 @@ export default function Home() {
             <span className="font-bold text-red-600"> seconds</span>.
           </p>
           
-          {/* Enhanced Search Section */}
+          {/* Search Section */}
           <div className="max-w-3xl mx-auto mb-16">
-            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-gray-200/50">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-200/50">
               <div className="flex flex-col lg:flex-row gap-6">
                 <div className="flex-1 relative">
                   <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6" />
@@ -164,7 +170,7 @@ export default function Home() {
                 <button
                   onClick={handleSearch}
                   disabled={isSearching}
-                  className="px-12 py-6 bg-gradient-to-r from-blue-600 to-red-600 hover:from-blue-700 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-3 text-lg shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
+                  className="px-12 py-6 bg-gradient-to-r from-blue-600 to-red-600 hover:from-blue-700 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-3 text-lg shadow-lg hover:shadow-xl"
                 >
                   {isSearching ? (
                     <>
@@ -183,24 +189,14 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Enhanced Stats with Pepsi-style cards */}
+          {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
-            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-gray-200/50 transform hover:scale-105 transition-transform">
-              <div className="text-4xl font-black text-blue-600 mb-2">$2.5M+</div>
-              <div className="text-gray-600 font-medium">Total Savings</div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-gray-200/50 transform hover:scale-105 transition-transform">
-              <div className="text-4xl font-black text-red-600 mb-2">50K+</div>
-              <div className="text-gray-600 font-medium">Procedures</div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-gray-200/50 transform hover:scale-105 transition-transform">
-              <div className="text-4xl font-black text-blue-600 mb-2">1.2K+</div>
-              <div className="text-gray-600 font-medium">Hospitals</div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-gray-200/50 transform hover:scale-105 transition-transform">
-              <div className="text-4xl font-black text-red-600 mb-2">25K+</div>
-              <div className="text-gray-600 font-medium">Users</div>
-            </div>
+            {statsData.map((stat, index) => (
+              <div key={index} className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50 hover:shadow-xl transition-shadow">
+                <div className={`text-3xl font-black ${stat.color} mb-2`}>{stat.value}</div>
+                <div className="text-gray-600 font-medium">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
 

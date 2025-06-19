@@ -5,15 +5,23 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	// Load environment variables
-	if err := godotenv.Load(); err != nil {
-		log.Printf("Warning: .env file not found, using system environment variables")
+	// Load environment variables from parent directory
+	parentDir := filepath.Dir(".")
+	envPath := filepath.Join(parentDir, ".env")
+
+	if err := godotenv.Load(envPath); err != nil {
+		log.Printf("Warning: .env file not found at %s, trying current directory", envPath)
+		// Try current directory as fallback
+		if err := godotenv.Load(); err != nil {
+			log.Printf("Warning: .env file not found in current directory either, using system environment variables")
+		}
 	}
 
 	// Get database connection details
